@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+
+        <!-- Back Button -->
+        <a href="javascript:history.back()" class="text-blue-500 mb-4 inline-block hover:text-blue-700">Back</a>
+
+        <!-- Form -->
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="text" class="block text-gray-700 font-medium mb-2">Enter Text</label>
+                <input type="text" name="text" id="text" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="flex justify-center">
+                <input type="submit" value="Submit" class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+        </form>
+
+        <!-- Message -->
+        <div class="mt-4">
+            <p class="text-center text-gray-700">
+                {% if msg %}
+                    {{ msg }}
+                {% endif %}
+            </p>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

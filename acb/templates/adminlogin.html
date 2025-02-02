@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        .login-container h2 {
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group input:focus {
+            border-color: #6f42c1;
+            outline: none;
+        }
+        .form-group button {
+            width: 107%;
+            padding: 10px;
+            background-color: #6f42c1;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #6f42c1;
+        }
+        .error-message {
+            color: #ff0000;
+            margin-top: 10px;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .login-link a {
+            color: #6f42c1;
+            text-decoration: none;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+    <div class="login-container">
+        <h2>Admin Login</h2>
+        
+            {% if msg %}
+            <p>{{ msg }}</p>
+            {% endif %}
+            <div class="form-group">  
+                <label for="email">id</label>
+                <input type="text" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Login</button>
+            </div>
+            <div class="error-message" id="error-message"></div>
+        </form>
+        
+        <!-- <div class="login-link">
+            <p>Don't have an account? <a href="/register/">Register here</a></p>
+        </div> -->
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMessage = document.getElementById('error-message');
+
+            // Basic validation example
+            if (!email || !password) {
+                errorMessage.textContent = 'Please enter both Roll Number and Password.';
+                return;
+            }
+
+            // Placeholder for authentication logic
+            // Replace this with actual authentication code
+            if (email === '12345' && password === 'password') {
+                errorMessage.textContent = 'Login successful!';
+                // Redirect or perform next steps here
+            } else {
+                errorMessage.textContent = 'Invalid Roll Number or Password.';
+            }
+        });
+    </script>
+
+</body>
+</html>
