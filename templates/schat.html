@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans p-5">
+<a class="px-4 py-2 bg-blue-500 rounded-md text-white" href="/studentindex/">Back to Home</a>
+<div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800">Chat with AI</h2>
+    
+    <form method="POST" action="" class="space-y-4">
+        {% csrf_token %}
+        <div>
+            <label for="prompt" class="block text-sm font-medium text-gray-700">Enter your prompt:</label>
+            <textarea id="prompt" name="prompt" rows="3" required
+                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-3 bg-gray-50"></textarea>
+        </div>
+        <button type="submit" 
+            class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-500 transition duration-200">
+            Send
+        </button>
+    </form>
+
+    {% if result %}
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4 shadow-sm">
+            <strong class="text-gray-700">Response:</strong>
+            <p class="mt-2 text-gray-800 whitespace-pre-wrap">{{ result }}</p>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>

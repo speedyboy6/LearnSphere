@@ -1,0 +1,276 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Attendance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #6e44ff, #b892ff);
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        .form-control, .form-select {
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #000000;
+        }
+        .btn-light {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+        }
+        .btn-light:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="javascript:history.back()" style="color: black;" class="mb-3 d-inline-block">Back</a>
+        <div class="text-center mb-4">
+            <i class="bi bi-person-check-fill" style="font-size: 2rem;"></i>
+            <h2 class="text-center">Add Student Result</h2>
+            <form method="POST">
+                {% csrf_token %}
+    
+                <div class="mb-3">
+                    <label class="form-label" for="courses"><i class="fas fa-user-graduate"></i> Course</label>
+                    <select name="courses" id="courses" class="form-select" required>
+                        <option value="">-- Select Course --</option>
+                        <option value="BBA">BBA</option>
+                        <option value="BSc.ComputerScience">BSc.ComputerScience</option>
+                        <option value="BCOM">BCOM</option>
+                        <option value="BSc.Chemistry">BSc.Chemistry</option>
+                        <option value="BSc.Zoology">BSc.Zoology</option>
+                        <option value="BSc.Botany">BSc.Botany</option>
+                    </select>
+                </div>
+    
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-calendar-alt"></i> Semester:</label>
+                    <select id="semester" name="semester" class="form-select" required>
+                        <option value="">-- Select Semester --</option>
+                        <option value="1">Semester 1</option>
+                        <option value="2">Semester 2</option>
+                        <option value="3">Semester 3</option>
+                        <option value="4">Semester 4</option>
+                        <option value="5">Semester 5</option>
+                        <option value="6">Semester 6</option>
+                    </select>
+                </div>
+    
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-user-graduate"></i> Student:</label>
+                    <select id="rollnumber" name="rollnumber" class="form-select" required>
+                        <option value="">-- Select Student --</option>
+                    </select>
+                </div>
+    
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-book"></i> Subject:</label>
+                    <input type="text" name="subject" class="form-control" required>
+                </div>
+    
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-pencil-alt"></i> Marks:</label>
+                    <input type="number" name="marks" class="form-control" required>
+                </div>
+    
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-trophy"></i> Total Marks:</label>
+                    <input type="number" name="total_marks" class="form-control" required>
+                </div>
+    
+                <button type="submit" class="btn btn-primary w-100">Add Result</button>
+            </form>
+        </div>
+    
+        <script>
+            $(document).ready(function() {
+                $("#courses, #semester").change(function() {
+                    let course = $("#courses").val();
+                    let semester = $("#semester").val();
+                    
+                    if (course && semester) {
+                        $.ajax({
+                            url: "{% url 'get_students' %}",
+                            type: "POST",
+                            data: {
+                                course: course,
+                                semester: semester,
+                                csrfmiddlewaretoken: "{{ csrf_token }}"
+                            },
+                            success: function(response) {
+                                let studentDropdown = $("#rollnumber");
+                                studentDropdown.empty();
+                                studentDropdown.append("<option value=''>-- Select Student --</option>");
+                                response.forEach(student => {
+                                    studentDropdown.append(`<option value="${student.RollNumber}">${student.Firstname} ${student.Lastname}</option>`);
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>
+     -->
+     <!DOCTYPE html>
+     <html lang="en">
+     <head>
+         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title>Add Student Result</title>
+         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+         
+         <style>
+             body {
+                 background: linear-gradient(135deg, #6a5acd, #8a2be2);
+                 min-height: 100vh;
+                 display: flex;
+                 align-items: center;
+                 justify-content: center;
+                 flex-direction: column;
+                 color: #fff;
+             }
+             .container, .table-container {
+                 background: rgba(255, 255, 255, 0.1);
+                 padding: 20px;
+                 border-radius: 10px;
+                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                 width: 90%;
+                 max-width: 800px;
+             }
+             table {
+                 color: #fff;
+             }
+             select, input {
+                 background: rgba(255, 255, 255, 0.2);
+                 color: white;
+                 border: none;
+             }
+             option {
+                 background: white;
+                 color: black;
+             }
+             .btn-primary {
+                 background: #6a5acd;
+                 border: none;
+             }
+             .btn-primary:hover {
+                 background: #5a4bbf;
+             }
+         </style>
+     </head>
+     <body>
+     
+         <div class="container">
+             <a href="javascript:history.back()" style="color: white; text-decoration: none;" class="mb-4 d-block">
+                 <i class="fas fa-arrow-left"></i> Back
+             </a>
+     
+             <h2 class="text-center">Add Student Result</h2>
+             <form method="POST">
+                 {% csrf_token %}
+     
+                 <div class="mb-3">
+                     <label class="form-label" for="courses"><i class="fas fa-user-graduate"></i> Course</label>
+                     <select name="courses" id="courses" class="form-select" required>
+                         <option value="">-- Select Course --</option>
+                         <option value="BBA">BBA</option>
+                         <option value="Bsc ComputerScience">BSc.ComputerScience</option>
+                         <option value="BCOM">BCOM</option>
+                         <option value="Bsc Chemistry">BSc.Chemistry</option>
+                         <option value="Bsc Zoology">BSc.Zoology</option>
+                         <option value="Bsc Botany">BSc.Botany</option>
+                         <option value="BCA">BCA</option>
+                     </select>
+                 </div>
+     
+                 <div class="mb-3">
+                     <label class="form-label"><i class="fas fa-calendar-alt"></i> Semester:</label>
+                     <select id="semester" name="semester" class="form-select" required>
+                         <option value="">-- Select Semester --</option>
+                         <option value="1">Semester 1</option>
+                         <option value="2">Semester 2</option>
+                         <option value="3">Semester 3</option>
+                         <option value="4">Semester 4</option>
+                         <option value="5">Semester 5</option>
+                         <option value="6">Semester 6</option>
+                     </select>
+                 </div>
+     
+                 <div class="mb-3">
+                     <label class="form-label"><i class="fas fa-user-graduate"></i> Student:</label>
+                     <select id="rollnumber" name="rollnumber" class="form-select" required>
+                         <option value="">-- Select Student --</option>
+                     </select>
+                 </div>
+     
+                 <div class="mb-3">
+                     <label class="form-label"><i class="fas fa-book"></i> Subject:</label>
+                     <input type="text" name="subject" class="form-control" required>
+                 </div>
+     
+                 <div class="mb-3">
+                     <label class="form-label"><i class="fas fa-pencil-alt"></i> Marks:</label>
+                     <input type="number" name="marks" class="form-control" required>
+                 </div>
+     
+                 <div class="mb-3">
+                     <label class="form-label"><i class="fas fa-trophy"></i> Total Marks:</label>
+                     <input type="number" name="total_marks" class="form-control" required>
+                 </div>
+     
+                 <button type="submit" class="btn btn-primary w-100">Add Result</button>
+             </form>
+         </div>
+     
+         <script>
+             $(document).ready(function() {
+                 $("#courses, #semester").change(function() {
+                     let course = $("#courses").val();
+                     let semester = $("#semester").val();
+                     
+                     if (course && semester) {
+                         $.ajax({
+                             url: "{% url 'get_students_for_result' %}",
+                             type: "POST",
+                             data: {
+                                 course: course,
+                                 semester: semester,
+                                 csrfmiddlewaretoken: "{{ csrf_token }}"
+                             },
+                             success: function(response) {
+                                 let studentDropdown = $("#rollnumber");
+                                 studentDropdown.empty();
+                                 studentDropdown.append("<option value=''>-- Select Student --</option>");
+                                 response.forEach(student => {
+                                     studentDropdown.append(`<option value="${student.RollNumber}">${student.Firstname} ${student.Lastname}</option>`);
+                                 });
+                             }
+                         });
+                     }
+                 });
+             });
+         </script>
+     </body>
+     </html>
+     

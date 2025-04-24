@@ -1,0 +1,153 @@
+{% extends 'adminhome.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .delete-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
+        .filter-container {
+            margin-bottom: 20px;
+        }
+        select, button {
+            padding: 8px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Student List</h1>
+
+<!-- Filter Section -->
+<div class="filter-container">
+    <select id="courseFilter" onchange="filterTable()">
+        <option value="">All Departments</option>
+        <option value="BBA">BBA</option>
+        <option value="Bsc.ComputerScience">Bsc.ComputerScience</option>
+        <option value="Bsc.Chemistry">Bsc.Chemistry</option>
+        <option value="Bsc.Zoology">Bsc.Zoology</option>
+        <option value="Bsc.Botany">Bsc.Botany</option>
+        <option value="BCOM">BCOM</option>
+        <option value="MBA">MBA</option>
+        <option value="BCA">BCA</option>
+    </select>
+
+    <select id="semesterFilter" onchange="filterTable()">
+        <option value="">All Semesters</option>
+        <option value="1">Semester 1</option>
+        <option value="2">Semester 2</option>
+        <option value="3">Semester 3</option>
+        <option value="4">Semester 4</option>
+        <option value="5">Semester 5</option>
+        <option value="6">Semester 6</option>
+    </select>
+
+    <button onclick="resetFilters()">Reset</button>
+</div>
+
+<!-- Student Table -->
+<table id="studentTable">
+    <thead>
+        <tr>
+            <th>Firstname</th>
+            <th>LastName</th>
+            <th>RollNumber</th>
+            <th>DOB</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Semester</th>
+            <th>Image</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in data %}
+        <tr>
+            <td>{{ i.Firstname }}</td>
+            <td>{{ i.Lastname }}</td>
+            <td>{{ i.RollNumber }}</td>
+            <td>{{ i.DOB }}</td>
+            <td>{{ i.Email }}</td>
+            <td>{{ i.courses }}</td>
+            <td>{{ i.sem }}</td>
+            <td>
+                {% if i.Image %}
+                <img src="/media/{{ i.Image }}" style="height: 50px; width: 50px;">
+                {% else %}
+                No Image
+                {% endif %}
+            </td>
+            <td>
+                <a href="/student_delete/{{ i.id }}">
+                    <button class="delete-button">Delete</button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    // Function to filter table based on course and semester
+    function filterTable() {
+        const course = document.getElementById('courseFilter').value.toLowerCase();
+        const semester = document.getElementById('semesterFilter').value.toLowerCase();
+        const table = document.getElementById('studentTable');
+        const rows = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < rows.length; i++) {
+            let courseCell = rows[i].getElementsByTagName('td')[5];
+            let semesterCell = rows[i].getElementsByTagName('td')[6];
+            if (courseCell && semesterCell) {
+                let courseText = courseCell.textContent || courseCell.innerText;
+                let semesterText = semesterCell.textContent || semesterCell.innerText;
+
+                if ((course === '' || courseText.toLowerCase().includes(course)) &&
+                    (semester === '' || semesterText.toLowerCase().includes(semester))) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+        }
+    }
+
+    // Function to reset filters
+    function resetFilters() {
+        document.getElementById('courseFilter').value = '';
+        document.getElementById('semesterFilter').value = '';
+        filterTable();
+    }
+</script>
+
+</body>
+</html>
+{% endblock %}
