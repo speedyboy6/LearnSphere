@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Explainer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full text-center">
+
+        <!-- Back Button -->
+        <a href="javascript:history.back()" class="text-blue-500 mb-4 inline-block hover:text-blue-700">Back</a>
+
+        <!-- Form -->
+        <form method="post" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="text" class="block text-gray-700 font-medium mb-1 text-left">Enter Text</label>
+                <input type="text" name="text" id="text" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label for="im" class="block text-gray-700 font-medium mb-1 text-left">Upload Image</label>
+                <input type="file" name="im" id="im" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="flex justify-center">
+                <input type="submit" value="Submit" class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+        </form>
+
+        <!-- Message Display & TTS Controls -->
+        <div class="mt-6">
+            <pre id="messageText" class="text-gray-700 text-lg font-medium whitespace-pre-wrap">
+                {% if msg %}
+                    {{ msg }}
+                {% endif %}
+            </pre>
+
+            {% if msg %}
+            <div class="flex justify-center gap-3 mt-3">
+                <button onclick="speakMessage()" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    Read
+                </button>
+                <button onclick="stopMessage()" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    Stop
+                </button>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <script>
+        let speech = null;
+
+        function speakMessage() {
+            const message = document.getElementById('messageText').textContent.trim();
+            if (message) {
+                speech = new SpeechSynthesisUtterance(message);
+                window.speechSynthesis.speak(speech);
+            }
+        }
+
+        function stopMessage() {
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+        }
+    </script>
+
+</body>
+
+</html>

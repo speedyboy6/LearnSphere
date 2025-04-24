@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Attendance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #6e44ff, #b892ff);
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        .form-control, .form-select {
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #000000;
+        }
+        .btn-light {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+        }
+        .btn-light:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="javascript:history.back()" style="color: black;" class="mb-3 d-inline-block">Back</a>
+        <div class="text-center mb-4">
+            <i class="bi bi-person-check-fill" style="font-size: 2rem;"></i>
+            <h2>Mark Attendance</h2>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="courses" class="form-label">Course</label>
+                <select name="courses" id="courses" class="form-select" required>
+                    <option value="">-- Select Course --</option>
+                    <option value="BBA">BBA</option>
+                    <option value="Bsc ComputerScience">BSc.ComputerScience</option>
+                    <option value="BCOM">BCOM</option>
+                    <option value="Bsc Chemistry">BSc.Chemistry</option>
+                    <option value="Bsc Zoology">BSc.Zoology</option>
+                    <option value="Bsc Botany">BSc.Botany</option>
+                    <option value="BCA">BCA</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="semester" class="form-label">Semester</label>
+                <select name="semester" id="semester" class="form-select" required>
+                    <option value="">-- Select Semester --</option>
+                    <option value="1">Semester 1</option>
+                    <option value="2">Semester 2</option>
+                    <option value="3">Semester 3</option>
+                    <option value="4">Semester 4</option>
+                    <option value="5">Semester 5</option>
+                    <option value="6">Semester 6</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="students" class="form-label">Student</label>
+                <select name="rollnumber" id="students" class="form-select" required>
+                    <option value="">-- Select Student --</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" name="date" id="date" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="status" class="form-label">Attendance Status</label>
+                <select name="status" id="status" class="form-select" required>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-light w-100">Submit Attendance</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("courses").addEventListener("change", fetchStudents);
+        document.getElementById("semester").addEventListener("change", fetchStudents);
+
+        function fetchStudents() {
+    let courseName = document.getElementById("courses").value;
+    let semester = document.getElementById("semester").value;
+
+    if (courseName && semester) {
+        let csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value; // Ensure CSRF token is fetched every time
+
+        fetch("{% url 'get_students' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({ course: courseName, semester: semester })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Fetched students:", data); // Debug
+            let studentDropdown = document.getElementById("students");
+            studentDropdown.innerHTML = "<option value=''>-- Select Student --</option>";
+
+            data.forEach(student => {
+                let option = document.createElement("option");
+                option.value = student.RollNumber;
+                option.textContent = student.Firstname + " " + student.Lastname;
+                studentDropdown.appendChild(option);
+            });
+        })
+        .catch(error => console.error("Error fetching students:", error));
+    }
+}
+    </script>
+</body>
+</html>
