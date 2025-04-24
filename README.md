@@ -48,7 +48,7 @@ Clone the repo:
 bash
 Copy
 Edit
-git clone https://github.com/your-username/learnsphere.git
+git clone https://github.com/speedyboy6/LearnSphere.git
 cd learnsphere
 Create and activate a virtual environment:
 
